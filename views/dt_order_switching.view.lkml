@@ -9,7 +9,7 @@ view: dt_order_switching {
               processed_at,
               customer_order_number,
               customer_order_number = 1 as is_first_order,
-              coalesce(discount_code = 'BESTDEAL',false) is_black_friday_order,
+              coalesce(discount_code = 'BLACKFRIDAY',false) is_black_friday_order,
               coalesce(customer_order_number = min(case when is_black_friday_order then customer_order_number end) over (partition by customer_id) -1,false) as is_last_order_before_bfcm,
               coalesce(customer_order_number = max(case when is_black_friday_order then customer_order_number end) over (partition by customer_id) + 1,false) as is_next_order_after_bfcm,
               coalesce(customer_order_number < min(case when is_black_friday_order then customer_order_number end) over (partition by customer_id),false) as is_orders_before_bfcm
